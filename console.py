@@ -2,9 +2,10 @@
 """Module console
 Serves as the entry point of the command interpreter"""
 
-from models.base_model import BaseModel
 from models import storage
+import json
 import cmd
+import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -31,10 +32,10 @@ class HBNBCommand(cmd.Cmd):
 
         if line is None or line == "":
             print("** class name missing **")
-        elif line != 'BaseModel':
+        elif line not in storage.classes():
             print("** class doesn't exist **")
         else:
-            o = BaseModel()
+            o = storage.classes()[line]()
             o.save()
             print(o.id)
 
@@ -45,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             words = line.split(' ')
-            if words[0] != 'BaseModel':
+            if words[0] not in storage.classes():
                 print("** class doesn't exist **")
             elif len(words) < 2:
                 print("** instance id missing **")
@@ -62,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             words = line.split(' ')
-            if words[0] != 'BaseModel':
+            if words[0] not in storage.classes():
                 print("** class doesn't exist **")
             elif len(words) < 2:
                 print("** instance id missing **")
@@ -79,7 +80,7 @@ class HBNBCommand(cmd.Cmd):
  given a class name or not\n"""
         if line != "":
             words = line.split(' ')
-            if words[0] != 'BaseModel':
+            if words[0] not in storage.classes():
                 print("** class doesn't exist **")
             else:
                 o_list = [str(obj) for key, obj in storage.all().items()
@@ -95,7 +96,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             words = line.split(' ')
-            if words[0] != 'BaseModel':
+            if words[0] not in storage.classes():
                 print("** class doesn't exit **")
             elif len(words) < 2:
                 print("** instance id missing **")
@@ -111,6 +112,62 @@ class HBNBCommand(cmd.Cmd):
                     else:
                         setattr(storage.all()[key], words[2], words[3])
                         storage.all()[key].save()
+
+    def precmd(self, line):
+        """Reconfigures string to the acceptable prompt formats
+        ex. <c_name>.show(<id>) translate to show <class name> <id> """
+        p = r"^(\w*)\.(\w+)(?:\(([^)]*)\))$"
+        m = re.search(p, line)
+        if not m:
+            return line
+
+        c_name = m.group(1)
+        method = m.group(2)
+        arg = m.group(3)
+        string = False
+        command = f"{method} {c_name}"
+        if arg != "":
+            id_arg = re.search('^"([^"]*)"(?:, (.*))?$', arg)
+            if not id_arg:
+                return line
+            uuid = id_arg.group(1)
+            string = id_arg.group(2)
+            command += f" {uuid}"
+
+        if method == 'update' and string:
+            is_dict = re.search(r"^{.*}$", string)
+            if is_dict:
+                try:
+                    a_dict = json.loads(string.replace("'", '"'))
+                except (ValueError, Exception):
+                    return line
+                else:
+                    return self.update_dict(command, a_dict)
+            is_atr = re.search(r'^(?:"([^"]*)")?(?:, "?([^"]*)"?)?$', string)
+            if is_atr:
+                command += f" {is_atr.group(1) or ''} {is_atr.group(2) or ''}"
+
+        return command
+
+    def update_dict(self, line, a_dict):
+        """Helper method for update() with a dictionary."""
+        if line == "":
+            print("** class name missing **")
+        else:
+            words = line.split(' ')
+            if words[1] not in storage.classes():
+                print("** class doesn't exit **")
+            elif len(words) < 3:
+                print("** instance id missing **")
+            else:
+                key = "{}.{}".format(words[1], words[2])
+                if key not in storage.all():
+                    print("** no instance found **")
+                else:
+                    for k, v in a_dict.items():
+                        setattr(storage.all()[key], k, v)
+                    storage.all()[key].save()
+        return ""
 
 
 if __name__ == '__main__':
