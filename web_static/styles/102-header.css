@@ -1,0 +1,15 @@
+header {
+    background-color: white;
+    height: 70px;
+    border-bottom: 1px solid #ccc;
+    background: white url(../images/logo.png);
+    background-repeat: no-repeat;
+    background-position: 20px center;
+    flex-shrink: 0;
+}
+
+@media (max-width: 50px){
+    header{
+        background-position: 15px center;
+    }
+}
