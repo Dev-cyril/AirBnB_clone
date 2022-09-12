@@ -1,0 +1,146 @@
+.places {
+    font-size: 30px;
+}
+
+.places article {
+    width: 390px;
+    border: 1px solid #FF5A5F;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 4px;
+}
+
+.places>div {
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.information {
+    height: 80px;
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.price_by_night {
+    border: 4px solid #FF5A5F;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.max_guest,
+.number_rooms,
+.number_bathrooms {
+    width: 100px;
+    font-size: medium;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.guest_img {
+    height: 30px;
+    width: 30px;
+    background: url(../images/icon_group.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.rooms_img {
+    height: 30px;
+    width: 30px;
+    background: url(../images/icon_bed.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.bathrooms_img {
+    height: 30px;
+    width: 30px;
+    background: url(../images/icon_bath.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.user {
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.description {
+    font-size: 20px;
+    padding: 10px;
+}
+
+.head {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.amenitiess,
+.reviews {
+    margin-top: 40px;
+    font-size: 16px;
+}
+
+.amenitiess h2,
+.reviews h2 {
+    font-size: 16px;
+    border-bottom: 1px solid #DDDDDD;
+}
+
+.amenitiess ul,
+.reviews ul {
+    list-style-type: none;
+    gap: 30px;
+}
+
+.wifi_icon {
+    height: 30px;
+    width: 30px;
+    background: url(../images/icon_wifi.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pet_icon {
+    height: 30px;
+    width: 30px;
+    background: url(../images/icon_pets.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tv_icon {
+    height: 30px;
+    width: 30px;
+    background: url(../images/icon_tv.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.amenitiess li {
+    display: flex;
+    gap: 20px;
+}
+
+@media (max-width: 500px) {
+    .places article {
+        width: 90%;
+    }
+}
