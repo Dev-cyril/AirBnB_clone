@@ -11,5 +11,6 @@ header {
 @media (max-width: 50px){
     header{
         background-position: 15px center;
+        width: 100%;
     }
 }
